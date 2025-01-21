@@ -1,15 +1,24 @@
+"""
+Create by Hashem 
+Web: https://www.hashem.it
+Github: https://github.com/theHashem
+Lindin: https://linkedin.com/in/hashem01
+Telegram: https://t.me/NoCallAllowed
+
+"""
+
 import telebot
 import yt_dlp
 import os
 
-# Dein Telegram-Bot-Token
+# Your Telegram-Bot-Token
 TOKEN = "your_Telegram_Token"
 bot = telebot.TeleBot(TOKEN)
 
-# Funktion zum Herunterladen der MP3-Datei
+# Function to download the MP3 file
 def download_audio_as_mp3(video_url):
     try:
-        # Optionen für yt-dlp
+        # Options for yt-dlp
         ydl_opts = {
             'format': 'bestaudio/best',
             'outtmpl': '%(title)s.%(ext)s',
@@ -30,7 +39,7 @@ def download_audio_as_mp3(video_url):
         print(f"Fehler beim Herunterladen: {e}")
         return None
 
-# Bot-Handler für Nachrichten
+# Bot-Handler for messages
 @bot.message_handler(commands=['start', 'help'])
 def send_welcome(message):
     bot.reply_to(message, "Hi, Send me a YouTube-Link!")
@@ -39,29 +48,29 @@ def send_welcome(message):
 def handle_message(message):
     video_url = message.text
 
-    # Überprüfen, ob die Nachricht ein YouTube-Link ist
+    # Check if the message is a YouTube link
     if "youtube.com" in video_url or "youtu.be" in video_url:
-        # Nachricht senden, dass der Download gestartet wird
+        # Send message that the download is starting
         waiting_message = bot.reply_to(message, "Please wait, the audio is downloading...")
 
-        # MP3 herunterladen
+        # MP3 download
         mp3_file = download_audio_as_mp3(video_url)
 
         if mp3_file:
-            # MP3-Datei an den Benutzer senden
+            # Send MP3 file to the user
             with open(mp3_file, 'rb') as audio:
                 bot.send_audio(message.chat.id, audio)
             
-            # Lokale Datei löschen, um Speicherplatz zu sparen
+            # Delete local file to save storage space
             os.remove(mp3_file)
 
-            # Nachricht löschen
+            # Delete message
             bot.delete_message(chat_id=message.chat.id, message_id=waiting_message.message_id)
         else:
             bot.reply_to(message, "Sorry, there was a problem downloading the file.")
     else:
         bot.reply_to(message, "No valid YouTube link.")
 
-# Bot starten
+# Start bot
 print("Bot running...")
 bot.polling()
