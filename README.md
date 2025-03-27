@@ -11,11 +11,22 @@ Feel free to write me if you have any questions: <a href="https://t.me/NoCallAll
 - Downloads MP3 files from YouTube video links.
 - Sends the downloaded MP3 files directly via Telegram.
 
+
 ## Requirements
 
 - Python 3.7 or higher
 - Telegram Bot Token (create a bot using BotFather)
 - A server or Raspberry Pi to run the bot
+
+## Update yt-dlp Command:
+
+```bash
+pip install --upgrade yt-dlp
+```
+or
+```bash
+yt-dlp -U 
+```
 
 ## Installation
 
